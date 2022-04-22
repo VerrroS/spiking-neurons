@@ -16,7 +16,8 @@
     text-decoration: none;
   }
 
-  #canvas {
-    width: 800px;
-    height: 800px;
+  #svg_canvas {
+    width: 100%;
+    height: 600px;
+    background-color: beige;
   }
