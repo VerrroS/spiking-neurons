@@ -1,18 +1,22 @@
 const plot = document.getElementById('plot');
 
-neuron_radius = 5;
+
+neuron_radius = 3;
 // variable for the namespace 
 const svgns = "http://www.w3.org/2000/svg";
-tau = 2.0
-v0 = -60.0
+tau = 1.0
+synaptic_weight = 0.2;
+spike_threshold = 2.0;
+reset = 1.0;
+init = 1.0;
 
 class Neuron {
     constructor(x, y, neuron_id){
         this.x = x;
         this.y = y;
         this.id = neuron_id;
-        this.incoming_links = [];
-        this.current = -10.0;
+        this.outgoing_links = [];
+        this.potential = init;
         this.circle = document.createElementNS(svgns, "circle");
         this.circle.classList.add("neuron");
         this.circle.dataset.id = neuron_id;
@@ -31,8 +35,25 @@ class Neuron {
         this.plotActive = false;
     }
 
+    spike(){
+        this.potential = 4.0;
+        this.circle.setAttribute("fill", "#f5015b");
+        this.outgoing_links.forEach(element => {
+            neurons[element].potential += synaptic_weight;
+        });
+    }
+
+    displayPlot() {
+        let data = [this.trace];
+        if (this.plotActive) {
+            Plotly.newPlot(plot, data);
+        }
+    }
+
+
+
     add_link(link) {
-        neurons[link].incoming_links.push(this.id);
+        this.outgoing_links.push(link);
         let arrow = document.createElementNS(svgns, "line");
         arrow.setAttribute("x1", this.x);
         arrow.setAttribute("y1", this.y);
@@ -44,30 +65,24 @@ class Neuron {
     }
 
     update(dt){
-        // get current from incoming links
-        this.incoming_links.forEach(element => {
-            this.current += neurons[element].current;
-        });
-        // calculate new current
-        this.vs.push(this.current);
+        // calculate new potential
         this.dt.push(dt);
-        let dv = (this.current - v0) / tau;
-        this.current += dv * dt;
-        if (this.current >= 10.0) {
-            this.current = -10;
-            this.circle.setAttribute("fill", "#7cwefe");
+        let alpha = Math.exp(-dt/tau);
+        this.potential = this.potential * alpha;
+        if (this.potential >= spike_threshold) {
+            this.spike();
+            this.vs.push(this.potential);
+            this.potential = reset;
         }
         else {
             this.circle.setAttribute("fill", "#5cceee");
+            this.vs.push(this.potential);
         }
-        let data = [this.trace];
-        if (this.plotActive) {
-            Plotly.newPlot(plot, data);
-        }
+        this.displayPlot();
     }
 
     clear() {
-        this.current = -10.0;
+        this.potential = init;
         this.vs = [];
         this.dt = [];
         this.trace = {
