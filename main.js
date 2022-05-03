@@ -1,22 +1,88 @@
 const svg_canvas = document.getElementById('svg_canvas')
 let neurons = [];
-const neurons_nodes = document.getElementsByClassName('neuron');
-const center = 60
+let neurons_nodes = [];
+const inputs = document.getElementsByTagName('input');
+const form = document.getElementById('form');
+const helpIcon = document.getElementsByClassName("help-icon");
+const width = 150;
+const height = 150;
+puffer = 5;
+var d = document.getElementById("d-timer");
+const dTimer = new Stopwatch(d, {
+    delay: 1000
+});
+const chance = (percentage) => Math.random() * 100 < percentage;
 
 function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// creating the neurons
-//for (i = 0; i < 5; i++) {
-//    neurons.push(new Neuron(center + random(-i*5, i*5), center + random(-i*5, i*5), i));
-//    neurons[i].add_link(random(0, neurons.length - 1));
-//}
+function resetNeurons() {
+    dTimer.reset();
+    deleteNeurons();
+    let number = document.getElementById('neuron_numb').value;
+    let tau = document.getElementById('tau').value;
+    let synaptic_weight =document.getElementById('synaptic_weight').value;
+    let spike_threshold = document.getElementById('spike_threshold').value;
+    let rest = document.getElementById('rest').value;
+    let link_chance = document.getElementById('link_chance').value;
+    for (i = 0; i < number; i++) {
+        coords = checkoverlap();
+        neurons.push(
+            new Neuron(
+                coords.x, 
+                coords.y,
+                i,
+                tau,
+                synaptic_weight,
+                spike_threshold,
+                rest
+                )
+            )
+    }
+    neurons.forEach(element => {
+        linkNeurons(element, link_chance);
+    });
+    neurons_nodes = document.getElementsByClassName('neuron');
+    Array.from(neurons_nodes).forEach(element => {
+        element.addEventListener("click", setPlotActive)});
+    
+    Array.from(neurons_nodes).forEach(element => {
+        element.addEventListener("dblclick", spike_neuron)});
+};
 
-neurons.push(new Neuron(center, center, 0));
-neurons.push(new Neuron(center + 20, center + 20, 1));
+function linkNeurons(element, link_chance){
+    neurons.forEach(element2 => {
+        link = chance(link_chance);
+        if (element.id != element2.id && link == true) {
+            element.addLink(element2);
+        }
+    });
+}
 
-neurons[1].add_link(0);
+function checkoverlap(){
+    overlap = false;
+    let x = random(puffer, width - puffer);
+    let y = random(puffer, height - puffer);
+    neurons.forEach(element => {
+        if (element.x == x || element.y == y) {
+            checkoverlap();
+        }
+    });
+    return {x: x, y: y};
+}
+
+function deleteNeurons(){
+    Array.from(neurons).forEach(element => {
+        delete element;
+        neurons.pop();
+    });
+    
+    Array.from(document.getElementsByClassName('svg_element')).forEach(element => {
+        svg_canvas.removeChild(element);
+    });
+}
+
 
 function spike_neuron() {
     neuron_id = this.dataset.id;
@@ -27,8 +93,13 @@ function spike_neuron() {
     });
 }
 
+
+function clearPlot(){
+    plot.innerHTML = "";
+}
+
+
 function setPlotActive() {
-    console.log(this.dataset.id);
     neuron_id = this.dataset.id;
     neurons.forEach(element => {
         if (element.id == neuron_id) {
@@ -39,10 +110,26 @@ function setPlotActive() {
         }
     });
     neurons[neuron_id].displayPlot();
-}
+    Array.from(neurons_nodes).forEach(element => {
+        if (element.dataset.id == neuron_id) {
+            neurons_nodes[neuron_id].classList.add("neuron_active");
+        }
+        else {
+            neurons_nodes[element.dataset.id].classList.remove("neuron_active");
+        }
+})}
 
-Array.from(neurons_nodes).forEach(element => {
-    element.addEventListener("click", setPlotActive)});
+resetNeurons();
 
-Array.from(neurons_nodes).forEach(element => {
-    element.addEventListener("dblclick", spike_neuron)});
+Array.from(inputs).forEach(element => {
+    element.addEventListener("change", resetNeurons)});
+
+Array.from(helpIcon).forEach(element => {
+    if (isTouchDevice()){
+        element.addEventListener("click", openHelper)
+    }
+    else{
+        element.addEventListener("mouseover", openHelper),
+        element.addEventListener("mouseout", openHelper)
+    }
+    });

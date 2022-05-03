@@ -4,26 +4,31 @@ const plot = document.getElementById('plot');
 neuron_radius = 3;
 // variable for the namespace 
 const svgns = "http://www.w3.org/2000/svg";
-tau = 1.0
-synaptic_weight = 0.2;
-spike_threshold = 2.0;
-reset = 1.0;
-init = 1.0;
+//tau = 1.0
+//synaptic_weight = 0.2;
+//spike_threshold = 2.0;
+
+
 
 class Neuron {
-    constructor(x, y, neuron_id){
+    constructor(x, y, neuron_id, tau, synaptic_weight, spike_threshold, rest){
         this.x = x;
         this.y = y;
         this.id = neuron_id;
         this.outgoing_links = [];
-        this.potential = init;
+        this.rest = parseFloat(rest);
+        this.potential = this.rest;
+        this.tau = parseFloat(tau);
+        this.synaptic_weight = parseFloat(synaptic_weight);
+        this.spike_threshold = parseFloat(spike_threshold);
+        this.timestep = 0.01;
         this.circle = document.createElementNS(svgns, "circle");
         this.circle.classList.add("neuron");
+        this.circle.classList.add("svg_element");
         this.circle.dataset.id = neuron_id;
         this.circle.setAttribute("cx", x);
         this.circle.setAttribute("cy", y);
         this.circle.setAttribute("r", neuron_radius);
-        this.circle.setAttribute("fill", "#5cceee");
         svg_canvas.appendChild(this.circle);
         this.vs = [];
         this.dt = [];
@@ -37,9 +42,9 @@ class Neuron {
 
     spike(){
         this.potential = 4.0;
-        this.circle.setAttribute("fill", "#f5015b");
+        neurons_nodes[this.id].classList.add("spiked");
         this.outgoing_links.forEach(element => {
-            neurons[element].potential += synaptic_weight;
+            element.potential += this.synaptic_weight;
         });
     }
 
@@ -48,41 +53,43 @@ class Neuron {
         if (this.plotActive) {
             Plotly.newPlot(plot, data);
         }
+
     }
 
 
-
-    add_link(link) {
+    addLink(link) {
         this.outgoing_links.push(link);
         let arrow = document.createElementNS(svgns, "line");
-        arrow.setAttribute("x1", this.x);
-        arrow.setAttribute("y1", this.y);
-        arrow.setAttribute("x2", neurons[link].x);
-        arrow.setAttribute("y2", neurons[link].y);
+        arrow.setAttribute("x1", this.x-neuron_radius/2);
+        arrow.setAttribute("y1", this.y - neuron_radius/2);
+        arrow.setAttribute("x2", link.x - neuron_radius/2);
+        arrow.setAttribute("y2", link.y - neuron_radius/2);
         arrow.setAttribute("stroke", "#5cceee");
-        arrow.setAttribute("stroke-width", "1");
-        svg_canvas.appendChild(arrow);
+        arrow.setAttribute("stroke-width", "0.5");
+        arrow.setAttribute("marker-end", "url(#arrow)");
+        arrow.classList.add("svg_element");
+        svg_canvas.prepend(arrow);
     }
 
     update(dt){
         // calculate new potential
         this.dt.push(dt);
-        let alpha = Math.exp(-dt/tau);
+        let alpha = Math.exp(this.timestep*-1/this.tau);
         this.potential = this.potential * alpha;
-        if (this.potential >= spike_threshold) {
+        if (this.potential >= this.spike_threshold) {
             this.spike();
             this.vs.push(this.potential);
-            this.potential = reset;
+            this.potential = this.rest;
         }
         else {
-            this.circle.setAttribute("fill", "#5cceee");
+            neurons_nodes[this.id].classList.remove("spiked");
             this.vs.push(this.potential);
         }
         this.displayPlot();
     }
 
     clear() {
-        this.potential = init;
+        this.potential = this.rest;
         this.vs = [];
         this.dt = [];
         this.trace = {
@@ -90,6 +97,9 @@ class Neuron {
             x: this.dt,
             type: 'scatter',
         }
+        neurons_nodes[this.id].classList.remove("spiked");
         let data = [this.trace];
+        this.plotActive = false;
     }
 }
+

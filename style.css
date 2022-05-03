@@ -21,3 +21,112 @@
     height: 600px;
     background-color: beige;
   }
+
+  .neuron {
+    fill: #006dfa;
+  }
+
+  .neuron:hover{
+    stroke: #006dfa;
+    stroke-width: 1px;
+  }
+
+ .neuron_active, .neuron:active {
+    stroke: aquamarine;
+    stroke-width: 1;
+  }
+
+  marker path {
+    fill: #5cceee;
+  }
+
+  input {
+    width: 70px;
+  }
+
+  .spiked {
+    fill: #fa3924;
+  }
+
+  #github {
+    font-size: 2.5rem;
+    color: lightslategray;
+}
+
+.help-icon div{
+  display: none;
+  position: absolute;
+  background-color: aliceblue;
+  font-size: medium;
+  z-index: 10;
+  font-weight: normal;
+  height: fit-content;
+  width: 400px;
+  padding: 1rem;
+  transform: translate(0,-100%);
+}
+
+.help-icon {
+  position: relative;
+}
+
+.active {
+  display: block!important;
+}
+
+#documentation h3, #documentation h4, #documentation p, #documentation li, #documentation pre {
+  margin-left: 3rem;
+}
+
+h1 {
+  display: flex;
+  justify-content: space-between;
+}
+
+h1 a{
+  font-size: 1.5rem;
+  font-weight: normal;
+  align-self: center;
+}
+
+.col-lg-6 {
+  position: relative;
+}
+
+#plot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+
+#github:hover {
+  color: darkslategray;
+}
+
+pre {
+  background-color: darkslategrey;
+  color: white;
+  padding: 5px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+@media screen and (max-width: 991px) {
+  #documentation h3, #documentation h4, #documentation p, #documentation li, #documentation pre {
+      margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 600px) {
+  h1 a{
+      font-size: .75rem!important;
+  }
+  h1 {
+      font-size: 1.2rem!important;
+  }
+  #github {
+      font-size: 1.5rem!important;
+  }
+}

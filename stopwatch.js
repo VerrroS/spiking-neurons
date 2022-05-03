@@ -55,6 +55,7 @@ var Stopwatch = function(elem, options) {
       clock = 0;
       render(0);
       neurons.forEach(element => element.clear());
+      clearPlot();
     }
   
     function update() {
@@ -64,7 +65,7 @@ var Stopwatch = function(elem, options) {
   
     function render() {
       timer.innerHTML = Math.round(clock / 1000);
-      neurons.forEach(element => element.update(clock / 100000));
+      neurons.forEach(element => element.update(clock/ 1000));
     }
   
     function delta() {
@@ -81,9 +82,5 @@ var Stopwatch = function(elem, options) {
     this.reset = reset;
   };
   
-  var d = document.getElementById("d-timer");
-  dTimer = new Stopwatch(d, {
-      delay: 1000
-  });
 
   
