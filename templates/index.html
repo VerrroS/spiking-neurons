@@ -4,8 +4,9 @@
 <h1>Spiking Neurons Visualization   <a href="/documentation.html">Dokumentation</a> </h1>
 
 <div class="row">
-  <div class="col-lg-6">
-    <form class=" " id="form">
+  <form class=" " id="form">
+      <label for="neuron_numb">Anzahl der Neuronen:</label>
+      <input type="range" min="2" max="100" value="10" id="neuron_numb" name="neuron_numb">
       <label for="tau">Tau:</label>
       <input type="number" id="tau" name="tau" value="1.0">
       <label for="spike_threshold">Spike Threshold:</label>
@@ -14,12 +15,11 @@
       <input type="number" id="synaptic_weight" name="synaptic_weight" value="0.9">
       <label for="rest">Rest Potential</label>
       <input type="number" id="rest" name="rest" value="1.7">
-      <label for="neuron_numb">Number of neurons:</label>
-      <input type="number" id="neuron_numb" name="neuron_numb" value="10">
       <label for="link_chance">Wahrscheinlichkeit der Verlinkung:</label>
-      <input type="number" id="link_chance" name="link_chance" value="30">
-      <div class="stopwatch" id="d-timer"></div>
+      <input type="range" min="1" max="100" value="30" id="link_chance" name="link_chance">
     </form>
+  <div class="col-lg-6">
+    <div class="stopwatch" id="d-timer"></div>
     <svg id="svg_canvas" viewBox="0 0 150 150" version="1.1"
     xmlns="http://www.w3.org/2000/svg">
     <defs>
