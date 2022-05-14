@@ -1,5 +1,7 @@
 .stopwatch {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    column-gap: 3px;
     background-color: white;
     border: 1px solid #eee;
     padding: 5px;
@@ -11,9 +13,12 @@
     display: block;
   }
   
-  .stopwatch a {
-    padding-right: 5px;
-    text-decoration: none;
+  .stopwatch svg, .help-icon svg {
+    font-size: 20px;
+  }
+
+  #sound_toggler {
+    margin-left: auto;
   }
 
   #svg_canvas {
@@ -27,12 +32,11 @@
   }
 
   .neuron:hover{
-    stroke: #006dfa;
-    stroke-width: 1px;
+    r: 3.4;
   }
 
  .neuron_active, .neuron:active {
-    stroke: aquamarine;
+    stroke: orange;
     stroke-width: 1;
   }
 
@@ -55,14 +59,31 @@
 #form{
   background-color: lightgrey;
   padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 24px;
 }
 
-  #github {
-    font-size: 2.5rem;
-    color: lightslategray;
+.range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.range p{
+  margin: 0;
+}
+
+#github {
+  font-size: 2.5rem;
+  color: lightslategray;
 }
 
 .help-icon div{
+  top: 10;
+  right: 20;
   display: none;
   position: absolute;
   background-color: aliceblue;
@@ -72,11 +93,12 @@
   height: fit-content;
   width: 400px;
   padding: 1rem;
-  transform: translate(0,-100%);
 }
 
 .help-icon {
   position: relative;
+  width: fit-content;
+  margin-left: auto;
 }
 
 .active {
@@ -102,12 +124,19 @@ h1 a{
   position: relative;
 }
 
-#plot {
+#plot-container {
   position: absolute;
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
+  width: 100%;
 }
+
+#plot-container h4 {
+  text-align: center;
+  display: none;
+}
+
 
 #github:hover {
   color: darkslategray;

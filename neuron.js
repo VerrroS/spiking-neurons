@@ -1,22 +1,30 @@
 const plot = document.getElementById('plot');
 
-
+rest = 0;
 neuron_radius = 3;
-// variable for the namespace 
 const svgns = "http://www.w3.org/2000/svg";
-//tau = 1.0
-//synaptic_weight = 0.2;
-//spike_threshold = 2.0;
+var layout = {
+    xaxis: {
+        title: {
+          text: 'Zeit [s]',
+        }
+    },
+    yaxis: {
+        title: {
+            text: 'potential [V]',
+        }
+    }
+}
 
 
 
 class Neuron {
-    constructor(x, y, neuron_id, tau, synaptic_weight, spike_threshold, rest){
+    constructor(x, y, neuron_id, tau, synaptic_weight, spike_threshold){
         this.x = x;
         this.y = y;
         this.id = neuron_id;
         this.outgoing_links = [];
-        this.rest = parseFloat(rest);
+        this.rest = rest;
         this.potential = this.rest;
         this.tau = parseFloat(tau);
         this.synaptic_weight = parseFloat(synaptic_weight);
@@ -43,6 +51,9 @@ class Neuron {
     spike(){
         this.potential = 4.0;
         neurons_nodes[this.id].classList.add("spiked");
+        if (soundOn){
+            neuron_sound.play();
+        }
         this.outgoing_links.forEach(element => {
             element.potential += this.synaptic_weight;
         });
@@ -51,7 +62,7 @@ class Neuron {
     displayPlot() {
         let data = [this.trace];
         if (this.plotActive) {
-            Plotly.newPlot(plot, data);
+            Plotly.newPlot(plot, data, layout);
         }
 
     }

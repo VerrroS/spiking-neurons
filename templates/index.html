@@ -5,21 +5,42 @@
 
 <div class="row">
   <form class=" " id="form">
-      <label for="neuron_numb">Anzahl der Neuronen:</label>
-      <input type="range" min="2" max="100" value="10" id="neuron_numb" name="neuron_numb">
-      <label for="tau">Tau:</label>
-      <input type="number" id="tau" name="tau" value="1.0">
-      <label for="spike_threshold">Spike Threshold:</label>
-      <input type="number" id="spike_threshold" name="spike_threshold" value="2.0">
-      <label for="synaptic_weight">Synaptic_weight:</label>
-      <input type="number" id="synaptic_weight" name="synaptic_weight" value="0.9">
-      <label for="rest">Rest Potential</label>
-      <input type="number" id="rest" name="rest" value="1.7">
-      <label for="link_chance">Wahrscheinlichkeit der Verlinkung:</label>
-      <input type="range" min="1" max="100" value="30" id="link_chance" name="link_chance">
+      <span class="range">
+        <label for="neuron_numb">Anzahl der Neuronen:</label>
+        <input type="range" min="2" max="200" value="10" id="neuron_numb" name="neuron_numb">
+        <p>10</p>
+      </span>
+      <span class="range">
+        <label for="link_chance">Wahrscheinlichkeit der Verlinkung:</label>
+        <input type="range" min="0" max="100" value="30" id="link_chance" name="link_chance" step="0.1">
+        <p>30</p><p>%</p>
+      </span>
+      <span>
+        <label for="tau" >Tau:</label>
+        <input type="number" id="tau" name="tau" value="1.0" step="0.1">
+      </span>
+      <span>
+        <label for="spike_threshold">Spike Threshold:</label>
+        <input type="number" id="spike_threshold" name="spike_threshold" value="2.0" step="0.1">
+      </span>
+      <span>
+        <label for="synaptic_weight">Synaptic_weight:</label>
+        <input type="number" id="synaptic_weight" name="synaptic_weight" value="0.9" step="0.1">
+      </span>
+      <div class="help-icon" data-key="settings-helper">
+        <span class="iconify" data-icon="bx:help-circle"></span>
+        <div id="settings-helper">
+          {% markdown %}
+          **Anzahl der Neuronen** gibt an wie viele Neuronen in der Simulation enthalten sind.
+          **Wahrscheinlichkeit der Verlinkung** gibt mit welcher Wahrscheinlichkeit ein Neuron mit einem anderen verbunden ist.
+          **Tau** gibt schnell das Potential über die Zeit abnimmt.
+          **Spike Threshold** gibt an wie hoch das Potential eins Neurons sein muss, um einen Spike zu erzeugen.
+          **Synaptic_weight** gibt an wie stark ein Neuron mit einem anderen verbunden ist.
+          {% endmarkdown %}
+        </div>
+      </div>
     </form>
   <div class="col-lg-6">
-    <div class="stopwatch" id="d-timer"></div>
     <svg id="svg_canvas" viewBox="0 0 150 150" version="1.1"
     xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -29,21 +50,33 @@
       </marker>
     </defs>
   </svg>
-</div>
-  <div class="col-lg-6">
-    <div id="plot"></div>
+  <div class="stopwatch" id="d-timer">
+    <span id="timer"></span>
+    <span id="start">
+      <span class="iconify" data-icon="carbon:play-filled-alt"></span>
+    </span>
+    <span id="reset">
+      <span class="iconify" data-icon="codicon:debug-restart"></span>
+    </span>
+    <span id="sound_toggler">
+      <span class="iconify" data-icon="akar-icons:sound-off" font-size="25px"></span>
+    </span>
   </div>
 </div>
-
-
-<div class="help-icon" data-key="classifier-helper">
-  <span class="iconify" data-icon="bx:help-circle"></span>
-  <div id="classifier-helper">
-    Hier sehen Sie das Ergebnis der Bildklassifikation mit dem TensorFlow Deep Learning Modell 
-    <a href="https://github.com/tensorflow/tfjs-models/tree/master/mobilenet">TensorFlow.js MobileNetV2</a>.
-    Das Modell trifft Vorhersagen darüber, was auf dem Bild zu sehen ist. Diese Vorhersagen wurden aus einem 
-    Datensatz von 50k Bildern vom Modell erlernt. Es werden die drei Erebnise mit den höchsten Konfidenzwerten angezeigt.
-    <a href="https://learn.ml5js.org/#/reference/image-classifier?id=model-and-data-provenance">Mehr Infos</a>
+  <div class="col-lg-6">
+    <div id="plot-container">
+      <h4 id="plot-nonactive" class="active">Klicken sie auf eines der Neuronen um dessen Potential zu sehen</h4>
+      <h4 id="plot-active">Potential des ausgewählten Neuron 
+        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="orange" stroke-width="4"/></svg>
+        <div class="help-icon" data-key="diagramm-helper">
+          <span class="iconify" data-icon="bx:help-circle"></span>
+          <div id="diagramm-helper">
+            Im angezeigen Diagramm sieht man das Ptential des aufgewählten Neurons über die Zeit hinweg.
+          </div>
+        </div>
+      </h4>
+      <div id="plot"></div>
+    </div>
   </div>
 </div>
 

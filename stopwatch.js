@@ -1,86 +1,63 @@
-var Stopwatch = function(elem, options) {
+var timer = document.getElementById('timer');
+const startButton = document.getElementById('start');
+const resetButton = document.getElementById('reset');
+const delay = 100;
 
-    var timer = createTimer(),
-      startButton = createButton("start", start),
-      stopButton = createButton("stop", stop),
-      resetButton = createButton("reset", reset),
-      offset,
-      clock,
-      interval;
-  
-    // default options
-    options = options || {};
-    options.delay = options.delay || 1;
-  
-    // append elements     
-    elem.appendChild(timer);
-    elem.appendChild(startButton);
-    elem.appendChild(stopButton);
-    elem.appendChild(resetButton);
-  
-    // initialize
-    reset();
-  
-    // private functions
-    function createTimer() {
-      return document.createElement("span");
-    }
-  
-    function createButton(action, handler) {
-      var a = document.createElement("a");
-      a.href = "#" + action;
-      a.innerHTML = action;
-      a.addEventListener("click", function(event) {
-        handler();
-        event.preventDefault();
-      });
-      return a;
-    }
-  
-    function start() {
-      if (!interval) {
-        offset = Date.now();
-        interval = setInterval(update, options.delay);
-      }
-    }
-  
-    function stop() {
-      if (interval) {
-        clearInterval(interval);
-        interval = null;
-      }
-    }
-  
-    function reset() {
-      clock = 0;
-      render(0);
-      neurons.forEach(element => element.clear());
-      clearPlot();
-    }
-  
-    function update() {
-      clock += delta();
-      render();
-    }
-  
-    function render() {
-      timer.innerHTML = Math.round(clock / 1000);
-      neurons.forEach(element => element.update(clock/ 1000));
-    }
-  
-    function delta() {
-      var now = Date.now(),
-        d = now - offset;
-  
-      offset = now;
-      return d;
-    }
-  
-    // public API
-    this.start = start;
-    this.stop = stop;
-    this.reset = reset;
-  };
-  
+var offset;
+var clock;
+var interval;
+
+const plot_active = document.getElementById('plot-active');
+const plot_nonactive = document.getElementById('plot-nonactive');
+ 
+function start() {
+  if (interval) {
+    clearInterval(interval);
+    interval = null;
+    startButton.children[0].setAttribute("data-icon", "carbon:play-filled-alt");
+  }
+  else {
+    offset = Date.now();
+    interval = setInterval(update, delay);
+    startButton.children[0].setAttribute("data-icon", "carbon:pause-filled");
+  }
+}
+
+function stop () {
+  clearInterval(interval);
+  interval = null;
+  startButton.children[0].setAttribute("data-icon", "carbon:play-filled-alt");
+}
 
   
+function reset() {
+  stop();
+  clock = 0;
+  render(0);
+  neurons.forEach(element => element.clear());
+  clearPlot();
+  displayElement("block", plot_nonactive);
+  displayElement("none", plot_active);
+}
+
+function update() {
+  clock += delta();
+  render();
+}
+
+function render() {
+  timer.innerHTML = Math.round(clock / 1000);
+  neurons.forEach(element => element.update(clock/ 1000));
+}
+
+function delta() {
+  var now = Date.now(),
+    d = now - offset;
+
+  offset = now;
+  return d;
+}
+
+startButton.addEventListener('click', start);
+resetButton.addEventListener('click', reset);
+

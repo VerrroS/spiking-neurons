@@ -8,18 +8,115 @@
 
 ## Technische Dokumentation
 
-Ich habe mich gegen ein Framework woe Tensorflow entschieden. Die Lösung ist nur in JavaScript, Html und Css implementiert. Zusätzlich habe ich [Plotly.js](https://plotly.com/javascript/) verwendet um die Signale der einzelnen Neuronen grafisch anzuzeigen
+Ich habe mich gegen ein Framework wie Tensorflow entschieden. Die Lösung ist nur in JavaScript, Html und Css implementiert. Zusätzlich habe ich [Plotly.js](https://plotly.com/javascript/) verwendet um die Signale der einzelnen Neuronen grafisch anzuzeigen.
 
 ## Fachliche Dokumentation
 
-Die Klasse **Neuron** 
+Die Klasse **Neuron** beinhaltet die wichtigste Logik der Simulation. Ein Neuron wird initalisiert mit einem Rest Potential, einer Spike Threshold, einem Tau Wert und einer Synaptic_weight. Diese Werte können vom Benutzer eingestellt werden.
 
+
+    class Neuron {
+        constructor(x, y, neuron_id, tau, synaptic_weight, spike_threshold){
+            this.x = x;
+            this.y = y;
+            this.id = neuron_id;
+            this.outgoing_links = [];
+            this.rest = rest;
+            this.potential = this.rest;
+            this.tau = parseFloat(tau);
+            this.synaptic_weight = parseFloat(synaptic_weight);
+            this.spike_threshold = parseFloat(spike_threshold);
+            this.timestep = 0.01;
+            this.circle = document.createElementNS(svgns, "circle");
+            this.circle.classList.add("neuron");
+            this.circle.classList.add("svg_element");
+            this.circle.dataset.id = neuron_id;
+            this.circle.setAttribute("cx", x);
+            this.circle.setAttribute("cy", y);
+            this.circle.setAttribute("r", neuron_radius);
+            svg_canvas.appendChild(this.circle);
+            this.vs = [];
+            this.dt = [];
+            this.trace = {
+                y: this.vs,
+                x: this.dt,
+                type: 'scatter',
+            }
+            this.plotActive = false;
+        }
+
+Mit der Funktion **resetNeurons()** werden die Neuronen initialisiert und je nach Einstellungen miteinander verknüpft.
+
+    function resetNeurons() {
+        dTimer.reset();
+        deleteNeurons();
+        let number = document.getElementById('neuron_numb').value;
+        let tau = document.getElementById('tau').value;
+        let synaptic_weight =document.getElementById('synaptic_weight').value;
+        let spike_threshold = document.getElementById('spike_threshold').value;
+        let link_chance = document.getElementById('link_chance').value;
+        for (i = 0; i < number; i++) {
+            coords = checkoverlap();
+            neurons.push(
+                new Neuron(
+                    coords.x, 
+                    coords.y,
+                    i,
+                    tau,
+                    synaptic_weight,
+                    spike_threshold,
+                    )
+                )
+        }
+        neurons.forEach(element => {
+            linkNeurons(element, link_chance);
+        });
+        neurons_nodes = document.getElementsByClassName('neuron');
+        Array.from(neurons_nodes).forEach(element => {
+            element.addEventListener("click", setPlotActive)});
+        
+        Array.from(neurons_nodes).forEach(element => {
+            element.addEventListener("dblclick", spike_neuron)});
+    };
+
+
+Die Methode **update()** wird in jedem Frame aufgerufen. Sie berechnet die Neuronen Potentiale und setzt die Neuronen auf den neuen Werten.
+Bei liegt das Potentioal über dem Spike Threshold wird ein Spike ausgelöst. Dieser wird dann in die **spike()** Funktion übergeben. Die verlinkten Neuronen 
+werden je nach Synaptischem Gewicht auch aktualisiert.
+
+    update(dt){
+        // calculate new potential
+        this.dt.push(dt);
+        let alpha = Math.exp(this.timestep*-1/this.tau);
+        this.potential = this.potential * alpha;
+        if (this.potential >= this.spike_threshold) {
+            this.spike();
+            this.vs.push(this.potential);
+            this.potential = this.rest;
+        }
+        else {
+            neurons_nodes[this.id].classList.remove("spiked");
+            this.vs.push(this.potential);
+        }
+        this.displayPlot();
+    }
+
+### Leaky Integrate-and-Fire
+Wenn das Neuron keinen Input bekommt nimmt das Potential des Neurons über die Zeit exponentiell ab. Wie schnell dieses Potential sinkt wird durch den Tau
+Wert eingestellt. Nach der Zeit Tau ist das Potential = Potential * 1/e.
+
+
+
+Wie schnell das Potential sinkt, hängt von der Tau-Wert ab. Dieser kann vom Benutzer 
+eingestellt werden.
 
 
 ## Quellen
 
-- https://github.com/akamaus/Spike
-- https://stackoverflow.com/questions/20318822/how-to-create-a-stopwatch-using-javascript
+- [https://github.com/akamaus/Spike](https://github.com/akamaus/Spike){:target="_blank"}
+- [JavaScript Stopwatch](https://stackoverflow.com/questions/20318822/how-to-create-a-stopwatch-using-javascript){:target="_blank"}
+- [Cosyne Tutorial 2022 - Spiking Neural Networks](https://neural-reckoning.github.io/cosyne-tutorial-2022/){:target="_blank"}
+- [The Leaky Integrate-and-Fire (LIF) neuron](https://colab.research.google.com/github/neural-reckoning/cosyne-tutorial-2022/blob/main/1-lif.ipynb){:target="_blank"}
 
 {% endmarkdown %}
 

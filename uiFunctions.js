@@ -31,3 +31,21 @@ function openHelper(e) {
     helper = document.getElementById(key);
     displayElement("toggle",helper);
 }
+
+function toggleSound() {
+    if (!soundOn) {
+        sound_toggler.children[0].setAttribute("data-icon", "akar-icons:sound-on");
+        soundOn = true;
+    } else {
+        sound_toggler.children[0].setAttribute("data-icon", "akar-icons:sound-off");
+        soundOn = false;
+    }
+}
+
+function setNumber(e) {
+    this.children[2].innerHTML = this.children[1].value;
+}
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();   
+  });

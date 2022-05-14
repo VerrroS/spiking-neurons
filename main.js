@@ -6,11 +6,11 @@ const form = document.getElementById('form');
 const helpIcon = document.getElementsByClassName("help-icon");
 const width = 150;
 const height = 150;
+const neuron_sound = new Audio('blop.mp3');
+const sound_toggler = document.getElementById("sound_toggler");
+soundOn = false;
+const ranges = document.getElementsByClassName('range');
 puffer = 5;
-var d = document.getElementById("d-timer");
-const dTimer = new Stopwatch(d, {
-    delay: 1000
-});
 const chance = (percentage) => Math.random() * 100 < percentage;
 
 function random(min, max) {
@@ -18,16 +18,15 @@ function random(min, max) {
 }
 
 function resetNeurons() {
-    dTimer.reset();
+    reset();
     deleteNeurons();
     let number = document.getElementById('neuron_numb').value;
     let tau = document.getElementById('tau').value;
     let synaptic_weight =document.getElementById('synaptic_weight').value;
     let spike_threshold = document.getElementById('spike_threshold').value;
-    let rest = document.getElementById('rest').value;
     let link_chance = document.getElementById('link_chance').value;
     for (i = 0; i < number; i++) {
-        coords = checkoverlap();
+        coords = {x: random(puffer, width - puffer), y: random(puffer, width - puffer)};
         neurons.push(
             new Neuron(
                 coords.x, 
@@ -36,7 +35,6 @@ function resetNeurons() {
                 tau,
                 synaptic_weight,
                 spike_threshold,
-                rest
                 )
             )
     }
@@ -60,17 +58,6 @@ function linkNeurons(element, link_chance){
     });
 }
 
-function checkoverlap(){
-    overlap = false;
-    let x = random(puffer, width - puffer);
-    let y = random(puffer, height - puffer);
-    neurons.forEach(element => {
-        if (element.x == x || element.y == y) {
-            checkoverlap();
-        }
-    });
-    return {x: x, y: y};
-}
 
 function deleteNeurons(){
     Array.from(neurons).forEach(element => {
@@ -100,6 +87,8 @@ function clearPlot(){
 
 
 function setPlotActive() {
+    displayElement("none", plot_nonactive);
+    displayElement("block", plot_active);
     neuron_id = this.dataset.id;
     neurons.forEach(element => {
         if (element.id == neuron_id) {
@@ -119,10 +108,16 @@ function setPlotActive() {
         }
 })}
 
+
 resetNeurons();
+
+sound_toggler.addEventListener("click", toggleSound);
 
 Array.from(inputs).forEach(element => {
     element.addEventListener("change", resetNeurons)});
+
+Array.from(ranges).forEach(element => {
+    element.addEventListener("input", setNumber)});
 
 Array.from(helpIcon).forEach(element => {
     if (isTouchDevice()){
