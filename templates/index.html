@@ -11,20 +11,20 @@
         <p>10</p>
       </span>
       <span class="range">
-        <label for="link_chance">Wahrscheinlichkeit der Verlinkung:</label>
+        <label for="link_chance">Vernetzungswahrscheinlichkeit:</label>
         <input type="range" min="0" max="100" value="30" id="link_chance" name="link_chance" step="0.1">
         <p>30</p><p>%</p>
       </span>
       <span>
-        <label for="tau" >Tau:</label>
-        <input type="number" id="tau" name="tau" value="1.0" step="0.1">
+        <label for="leakage" >Leakage:</label>
+        <input type="number" id="leakage" name="leakage" value="10" step="0.1">
       </span>
       <span>
         <label for="spike_threshold">Spike Threshold:</label>
         <input type="number" id="spike_threshold" name="spike_threshold" value="2.0" step="0.1">
       </span>
       <span>
-        <label for="synaptic_weight">Synaptic_weight:</label>
+        <label for="synaptic_weight">Synaptic Weight:</label>
         <input type="number" id="synaptic_weight" name="synaptic_weight" value="0.9" step="0.1">
       </span>
       <div class="help-icon" data-key="settings-helper">
@@ -32,15 +32,26 @@
         <div id="settings-helper">
           {% markdown %}
           **Anzahl der Neuronen** gibt an wie viele Neuronen in der Simulation enthalten sind.
-          **Wahrscheinlichkeit der Verlinkung** gibt mit welcher Wahrscheinlichkeit ein Neuron mit einem anderen verbunden ist.
-          **Tau** gibt schnell das Potential über die Zeit abnimmt.
+
+          **Vernetzungswahrscheinlichkeit** gibt mit welcher Wahrscheinlichkeit ein Neuron mit einem anderen verbunden ist.
+
+          **Leakage** gibt schnell das Potential über die Zeit abnimmt [weitere Informationen](/documentation.html#leakage).
+
           **Spike Threshold** gibt an wie hoch das Potential eins Neurons sein muss, um einen Spike zu erzeugen.
-          **Synaptic_weight** gibt an wie stark ein Neuron mit einem anderen verbunden ist.
+
+          **Synaptic weight** gibt an wie stark ein Neuron mit einem anderen verbunden ist.
           {% endmarkdown %}
         </div>
       </div>
     </form>
-  <div class="col-lg-6">
+  <div class="col-lg-6" id="svg-container">
+    <div id="info">
+      <span id="close"><span class="iconify" data-icon="ant-design:close-outlined"></span></span>
+      <div>
+      <span class="iconify" data-icon="akar-icons:info" font-size="25px"></span>
+      <p>Starten sie die Simulation mit dem Play Button <span class="iconify" data-icon="carbon:play-filled-alt"></span> und lösen sie mit Doppelklicks auf die Neuronen Spikes aus</p>
+      </div>
+    </div>
     <svg id="svg_canvas" viewBox="0 0 150 150" version="1.1"
     xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -71,7 +82,7 @@
         <div class="help-icon" data-key="diagramm-helper">
           <span class="iconify" data-icon="bx:help-circle"></span>
           <div id="diagramm-helper">
-            Im angezeigen Diagramm sieht man das Ptential des aufgewählten Neurons über die Zeit hinweg.
+            Im angezeigen Diagramm sieht man das Potential des aufgewählten Neurons über die Zeit hinweg.
           </div>
         </div>
       </h4>
@@ -86,6 +97,12 @@
   ## Experimente und Fragestellungen
 
   **Experimente mit unterschiedlich dichter und starker (Synapsen) Vernetzung**
+
+  - **Vernetzungswahrscheinlichkeit 30%, Synaptic Weight 0.5**
+      * Um eine Anregung der Neuronen zu starten sind mehrere Spikes in kurzen Zeitabständen zueinander nötig. Nach einer kurzen Phase in der sich die Neuronen gegenseitig aktivieren, versiegt das Potential wieder schnell. 
+
+
+
 
   **Welchen Einfluss hat die initiale Anregung des Netzes auf den Endzustand.**
 

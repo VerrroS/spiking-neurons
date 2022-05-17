@@ -12,6 +12,8 @@ soundOn = false;
 const ranges = document.getElementsByClassName('range');
 puffer = 5;
 const chance = (percentage) => Math.random() * 100 < percentage;
+const info = document.getElementById('info');
+const close_info = document.getElementById('close');
 
 function random(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -21,7 +23,7 @@ function resetNeurons() {
     reset();
     deleteNeurons();
     let number = document.getElementById('neuron_numb').value;
-    let tau = document.getElementById('tau').value;
+    let leakage = document.getElementById('leakage').value;
     let synaptic_weight =document.getElementById('synaptic_weight').value;
     let spike_threshold = document.getElementById('spike_threshold').value;
     let link_chance = document.getElementById('link_chance').value;
@@ -32,7 +34,7 @@ function resetNeurons() {
                 coords.x, 
                 coords.y,
                 i,
-                tau,
+                leakage,
                 synaptic_weight,
                 spike_threshold,
                 )
@@ -85,6 +87,9 @@ function clearPlot(){
     plot.innerHTML = "";
 }
 
+function closeInfo() {
+    info.style.display = "none";
+}
 
 function setPlotActive() {
     displayElement("none", plot_nonactive);
@@ -128,3 +133,5 @@ Array.from(helpIcon).forEach(element => {
         element.addEventListener("mouseout", openHelper)
     }
     });
+
+close_info.addEventListener("click", closeInfo);

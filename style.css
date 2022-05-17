@@ -81,6 +81,33 @@
   color: lightslategray;
 }
 
+#svg-container {
+  padding-right:0;
+  padding-left: 0;
+}
+
+#info {
+  position: absolute;
+  padding: 10px;
+  background-color: #ffb77e;
+}
+
+#info div {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  align-items: center;
+}
+
+#close svg{
+  display: block;
+  margin-left: auto;
+  font-size: 20px;
+}
+
+#info p {
+  margin: 0;
+}
+
 .help-icon div{
   top: 10;
   right: 20;

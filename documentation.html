@@ -17,18 +17,19 @@
 
 <h1>Dokumentation   <a href="./">Zur&uuml;ck zur Neuronen Simulation</a>  <a href="https://github.com/VerrroS/spiking-neurons" id="github" target="_blank"><span class="iconify" data-icon="akar-icons:github-fill"></span></a></h1>
 <h2>Technische Dokumentation</h2>
-<p>Ich habe mich gegen ein Framework wie Tensorflow entschieden. Die Lösung ist nur in JavaScript, Html und Css implementiert. Zusätzlich habe ich <a href="https://plotly.com/javascript/">Plotly.js</a> verwendet um die Signale der einzelnen Neuronen grafisch anzuzeigen.</p>
+<p>Ich habe mich gegen ein Framework wie Tensorflow entschieden. Die Lösung ist nur in JavaScript, Html und Css implementiert. Zusätzlich habe ich <a href="https://plotly.com/javascript/">Plotly.js</a> verwendet um die Signale der einzelnen Neuronen grafisch anzuzeigen.
+Um das Layout zu gestalten habe ich <a href="https://getbootstrap.com/">Bootstrap</a> und <a href="https://iconify.design/">Iconify</a> verwendet.</p>
 <h2>Fachliche Dokumentation</h2>
-<p>Die Klasse <strong>Neuron</strong> beinhaltet die wichtigste Logik der Simulation. Ein Neuron wird initalisiert mit einem Rest Potential, einer Spike Threshold, einem Tau Wert und einer Synaptic_weight. Diese Werte können vom Benutzer eingestellt werden.</p>
+<p>Die Klasse <strong>Neuron</strong> beinhaltet die wichtigste Logik der Simulation. Ein Neuron wird initalisiert mit einem Rest Potential, einer Spike Threshold, einem leakage Wert und einer Synaptic weight. Diese Werte können vom Benutzer eingestellt werden.</p>
 <div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="n">Neuron</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="n">constructor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">neuron_id</span><span class="p">,</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">synaptic_weight</span><span class="p">,</span><span class="w"> </span><span class="n">spike_threshold</span><span class="p">){</span><span class="w"></span>
+<span class="w">    </span><span class="n">constructor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">neuron_id</span><span class="p">,</span><span class="w"> </span><span class="n">leakage</span><span class="p">,</span><span class="w"> </span><span class="n">synaptic_weight</span><span class="p">,</span><span class="w"> </span><span class="n">spike_threshold</span><span class="p">){</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">;</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">neuron_id</span><span class="p">;</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">outgoing_links</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[];</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">rest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rest</span><span class="p">;</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">potential</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="o">.</span><span class="n">rest</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">tau</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parseFloat</span><span class="p">(</span><span class="n">tau</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">leakage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parseFloat</span><span class="p">(</span><span class="n">leakage</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">synaptic_weight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parseFloat</span><span class="p">(</span><span class="n">synaptic_weight</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">spike_threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parseFloat</span><span class="p">(</span><span class="n">spike_threshold</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">timestep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.01</span><span class="p">;</span><span class="w"></span>
@@ -48,6 +49,7 @@
 <span class="w">            </span><span class="n">type</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;scatter&#39;</span><span class="p">,</span><span class="w"></span>
 <span class="w">        </span><span class="p">}</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">plotActive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="n">timestep</span><span class="o">*-</span><span class="mi">1</span><span class="o">/</span><span class="n">this</span><span class="o">.</span><span class="n">leakage</span><span class="p">);</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
@@ -56,7 +58,7 @@
     <span class="nv">dTimer</span>.<span class="nv">reset</span><span class="ss">()</span><span class="c1">;</span>
     <span class="nv">deleteNeurons</span><span class="ss">()</span><span class="c1">;</span>
     <span class="nv">let</span> <span class="nv">number</span> <span class="o">=</span> <span class="nv">document</span>.<span class="nv">getElementById</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">neuron_numb</span><span class="s1">&#39;</span><span class="ss">)</span>.<span class="nv">value</span><span class="c1">;</span>
-    <span class="nv">let</span> <span class="nv">tau</span> <span class="o">=</span> <span class="nv">document</span>.<span class="nv">getElementById</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">tau</span><span class="s1">&#39;</span><span class="ss">)</span>.<span class="nv">value</span><span class="c1">;</span>
+    <span class="nv">let</span> <span class="nv">leakage</span> <span class="o">=</span> <span class="nv">document</span>.<span class="nv">getElementById</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">leakage</span><span class="s1">&#39;</span><span class="ss">)</span>.<span class="nv">value</span><span class="c1">;</span>
     <span class="nv">let</span> <span class="nv">synaptic_weight</span> <span class="o">=</span><span class="nv">document</span>.<span class="nv">getElementById</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">synaptic_weight</span><span class="s1">&#39;</span><span class="ss">)</span>.<span class="nv">value</span><span class="c1">;</span>
     <span class="nv">let</span> <span class="nv">spike_threshold</span> <span class="o">=</span> <span class="nv">document</span>.<span class="nv">getElementById</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">spike_threshold</span><span class="s1">&#39;</span><span class="ss">)</span>.<span class="nv">value</span><span class="c1">;</span>
     <span class="nv">let</span> <span class="nv">link_chance</span> <span class="o">=</span> <span class="nv">document</span>.<span class="nv">getElementById</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">link_chance</span><span class="s1">&#39;</span><span class="ss">)</span>.<span class="nv">value</span><span class="c1">;</span>
@@ -67,7 +69,7 @@
                 <span class="nv">coords</span>.<span class="nv">x</span>, 
                 <span class="nv">coords</span>.<span class="nv">y</span>,
                 <span class="nv">i</span>,
-                <span class="nv">tau</span>,
+                <span class="nv">leakage</span>,
                 <span class="nv">synaptic_weight</span>,
                 <span class="nv">spike_threshold</span>,
                 <span class="ss">)</span>
@@ -85,14 +87,14 @@
 }<span class="c1">;</span>
 </code></pre></div>
 
-<p>Die Methode <strong>update()</strong> wird in jedem Frame aufgerufen. Sie berechnet die Neuronen Potentiale und setzt die Neuronen auf den neuen Werten.
-Bei liegt das Potentioal über dem Spike Threshold wird ein Spike ausgelöst. Dieser wird dann in die <strong>spike()</strong> Funktion übergeben. Die verlinkten Neuronen 
-werden je nach Synaptischem Gewicht auch aktualisiert.</p>
+<p>Die Methode <strong>update()</strong>, aus der Klasse Neuron, wird in jedem Frame aufgerufen. Sie berechnet die Neuronen Potentiale und setzt die Neuronen auf den neuen Werten.
+Liegt das Potentioal über dem Spike Threshold wird ein Spike ausgelöst. Dieser wird dann in die <strong>spike()</strong> Funktion übergeben. Die verlinkten Neuronen 
+werden je nach Synaptischem Gewicht auch aktualisiert. Um das Potential über die Zeit anzeigen zu können wird ein Array mit den Potentialen und ein Array mit den Zeiten gespeichert.
+Sobald das Neuron angeklickt wird werden diese Werte in einem Plot angezeigt.</p>
 <div class="codehilite"><pre><span></span><code><span class="nv">update</span><span class="ss">(</span><span class="nv">dt</span><span class="ss">)</span>{
     <span class="o">//</span> <span class="nv">calculate</span> <span class="nv">new</span> <span class="nv">potential</span>
     <span class="nv">this</span>.<span class="nv">dt</span>.<span class="nv">push</span><span class="ss">(</span><span class="nv">dt</span><span class="ss">)</span><span class="c1">;</span>
-    <span class="nv">let</span> <span class="nv">alpha</span> <span class="o">=</span> <span class="nv">Math</span>.<span class="nv">exp</span><span class="ss">(</span><span class="nv">this</span>.<span class="nv">timestep</span><span class="o">*-</span><span class="mi">1</span><span class="o">/</span><span class="nv">this</span>.<span class="nv">tau</span><span class="ss">)</span><span class="c1">;</span>
-    <span class="nv">this</span>.<span class="nv">potential</span> <span class="o">=</span> <span class="nv">this</span>.<span class="nv">potential</span> <span class="o">*</span> <span class="nv">alpha</span><span class="c1">;</span>
+    <span class="nv">this</span>.<span class="nv">potential</span> <span class="o">=</span> <span class="nv">this</span>.<span class="nv">potential</span> <span class="o">*</span> <span class="nv">this</span>.<span class="nv">alpha</span><span class="c1">;</span>
     <span class="k">if</span> <span class="ss">(</span><span class="nv">this</span>.<span class="nv">potential</span> <span class="o">&gt;=</span> <span class="nv">this</span>.<span class="nv">spike_threshold</span><span class="ss">)</span> {
         <span class="nv">this</span>.<span class="nv">spike</span><span class="ss">()</span><span class="c1">;</span>
         <span class="nv">this</span>.<span class="nv">vs</span>.<span class="nv">push</span><span class="ss">(</span><span class="nv">this</span>.<span class="nv">potential</span><span class="ss">)</span><span class="c1">;</span>
@@ -106,11 +108,29 @@ werden je nach Synaptischem Gewicht auch aktualisiert.</p>
 }
 </code></pre></div>
 
-<h3>Leaky Integrate-and-Fire</h3>
-<p>Wenn das Neuron keinen Input bekommt nimmt das Potential des Neurons über die Zeit exponentiell ab. Wie schnell dieses Potential sinkt wird durch den Tau
-Wert eingestellt. Nach der Zeit Tau ist das Potential = Potential * 1/e.</p>
-<p>Wie schnell das Potential sinkt, hängt von der Tau-Wert ab. Dieser kann vom Benutzer 
-eingestellt werden.</p>
+<p>In der <strong>spike()</strong> Methode bekommt das Neuron die Klasse spike und wird dementsprechend in einer anderen Farbe dargestellt. Ist der Sound aktiviert, wird ein Ton abgespielt.
+Das synaptische Gewicht wird an die verlinkten Neuronen übergeben.</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">spike</span><span class="ss">()</span>{
+    <span class="nv">this</span>.<span class="nv">potential</span> <span class="o">=</span> <span class="mi">4</span>.<span class="mi">0</span><span class="c1">;</span>
+    <span class="nv">neurons_nodes</span>[<span class="nv">this</span>.<span class="nv">id</span>].<span class="nv">classList</span>.<span class="nv">add</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">spiked</span><span class="s2">&quot;</span><span class="ss">)</span><span class="c1">;</span>
+    <span class="k">if</span> <span class="ss">(</span><span class="nv">soundOn</span><span class="ss">)</span>{
+        <span class="nv">neuron_sound</span>.<span class="nv">play</span><span class="ss">()</span><span class="c1">;</span>
+    }
+    <span class="nv">this</span>.<span class="nv">outgoing_links</span>.<span class="nv">forEach</span><span class="ss">(</span><span class="nv">element</span> <span class="o">=&gt;</span> {
+        <span class="nv">element</span>.<span class="nv">potential</span> <span class="o">+=</span> <span class="nv">this</span>.<span class="nv">synaptic_weight</span><span class="c1">;</span>
+    }<span class="ss">)</span><span class="c1">;</span>
+}
+</code></pre></div>
+
+<h3 id="leakage">
+Leaky Integrate-and-Fire
+</h3>
+
+<p>Wenn das Neuron keinen Input bekommt nimmt das Potential (V) des Neurons über die Zeit(t) exponentiell ab und nähert sich dem Wert 0. Wie schnell dieses Potential sinkt wird durch den Leakage Wert(tau)
+eingestellt. Dieser Abfall wird durch folgende Funktion beschrieben.</p>
+<p><img alt="equasion" src="tau.svg" /></p>
+<p>Je größer der Leakage Wer ist desto schneller sinkt das Potential. In der Methode <strong>update()</strong> wird der Abfall des Potentials mit der Konstanten alpha berechnet.
+Die Herleitung dieser Berechnung ist in der stammt aus folgendem <a href="https://colab.research.google.com/github/neural-reckoning/cosyne-tutorial-2022/blob/main/1-lif.ipynb#scrollTo=febd51da">Dokument</a>.</p>
 <h2>Quellen</h2>
 <ul>
 <li><a href="https://github.com/akamaus/Spike" target="_blank">https://github.com/akamaus/Spike</a></li>

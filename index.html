@@ -25,34 +25,41 @@
         <p>10</p>
       </span>
       <span class="range">
-        <label for="link_chance">Wahrscheinlichkeit der Verlinkung:</label>
+        <label for="link_chance">Vernetzungswahrscheinlichkeit:</label>
         <input type="range" min="0" max="100" value="30" id="link_chance" name="link_chance" step="0.1">
         <p>30</p><p>%</p>
       </span>
       <span>
-        <label for="tau" >Tau:</label>
-        <input type="number" id="tau" name="tau" value="1.0" step="0.1">
+        <label for="leakage" >Leakage:</label>
+        <input type="number" id="leakage" name="leakage" value="10" step="0.1">
       </span>
       <span>
         <label for="spike_threshold">Spike Threshold:</label>
         <input type="number" id="spike_threshold" name="spike_threshold" value="2.0" step="0.1">
       </span>
       <span>
-        <label for="synaptic_weight">Synaptic_weight:</label>
+        <label for="synaptic_weight">Synaptic Weight:</label>
         <input type="number" id="synaptic_weight" name="synaptic_weight" value="0.9" step="0.1">
       </span>
       <div class="help-icon" data-key="settings-helper">
         <span class="iconify" data-icon="bx:help-circle"></span>
         <div id="settings-helper">
-          <p><strong>Anzahl der Neuronen</strong> gibt an wie viele Neuronen in der Simulation enthalten sind.
-<strong>Wahrscheinlichkeit der Verlinkung</strong> gibt mit welcher Wahrscheinlichkeit ein Neuron mit einem anderen verbunden ist.
-<strong>Tau</strong> gibt schnell das Potential über die Zeit abnimmt.
-<strong>Spike Threshold</strong> gibt an wie hoch das Potential eins Neurons sein muss, um einen Spike zu erzeugen.
-<strong>Synaptic_weight</strong> gibt an wie stark ein Neuron mit einem anderen verbunden ist.</p>
+          <p><strong>Anzahl der Neuronen</strong> gibt an wie viele Neuronen in der Simulation enthalten sind.</p>
+<p><strong>Vernetzungswahrscheinlichkeit</strong> gibt mit welcher Wahrscheinlichkeit ein Neuron mit einem anderen verbunden ist.</p>
+<p><strong>Leakage</strong> gibt schnell das Potential über die Zeit abnimmt <a href="/documentation.html#leakage">weitere Informationen</a>.</p>
+<p><strong>Spike Threshold</strong> gibt an wie hoch das Potential eins Neurons sein muss, um einen Spike zu erzeugen.</p>
+<p><strong>Synaptic weight</strong> gibt an wie stark ein Neuron mit einem anderen verbunden ist.</p>
         </div>
       </div>
     </form>
-  <div class="col-lg-6">
+  <div class="col-lg-6" id="svg-container">
+    <div id="info">
+      <span id="close"><span class="iconify" data-icon="ant-design:close-outlined"></span></span>
+      <div>
+      <span class="iconify" data-icon="akar-icons:info" font-size="25px"></span>
+      <p>Starten sie die Simulation mit dem Play Button <span class="iconify" data-icon="carbon:play-filled-alt"></span> und lösen sie mit Doppelklicks auf die Neuronen Spikes aus</p>
+      </div>
+    </div>
     <svg id="svg_canvas" viewBox="0 0 150 150" version="1.1"
     xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -83,7 +90,7 @@
         <div class="help-icon" data-key="diagramm-helper">
           <span class="iconify" data-icon="bx:help-circle"></span>
           <div id="diagramm-helper">
-            Im angezeigen Diagramm sieht man das Ptential des aufgewählten Neurons über die Zeit hinweg.
+            Im angezeigen Diagramm sieht man das Potential des aufgewählten Neurons über die Zeit hinweg.
           </div>
         </div>
       </h4>
@@ -95,6 +102,12 @@
 <section class="mt-4">
   <h2>Experimente und Fragestellungen</h2>
 <p><strong>Experimente mit unterschiedlich dichter und starker (Synapsen) Vernetzung</strong></p>
+<ul>
+<li><strong>Vernetzungswahrscheinlichkeit 30%, Synaptic Weight 0.5</strong><ul>
+<li>Um eine Anregung der Neuronen zu starten sind mehrere Spikes in kurzen Zeitabständen zueinander nötig. Nach einer kurzen Phase in der sich die Neuronen gegenseitig aktivieren, versiegt das Potential wieder schnell. </li>
+</ul>
+</li>
+</ul>
 <p><strong>Welchen Einfluss hat die initiale Anregung des Netzes auf den Endzustand.</strong></p>
 <p><strong>Welche anderen Dynamiken außer der Sättigung und dem Versiegen von Aktivität ist prinzipiell möglich? Gelingt es Ihnen Eine solche Dynamik zu erzeugen?</strong></p>
 </section>

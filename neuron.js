@@ -19,17 +19,17 @@ var layout = {
 
 
 class Neuron {
-    constructor(x, y, neuron_id, tau, synaptic_weight, spike_threshold){
+    constructor(x, y, neuron_id, leakage, synaptic_weight, spike_threshold){
         this.x = x;
         this.y = y;
         this.id = neuron_id;
         this.outgoing_links = [];
         this.rest = rest;
         this.potential = this.rest;
-        this.tau = parseFloat(tau);
+        this.leakage = parseFloat(leakage);
         this.synaptic_weight = parseFloat(synaptic_weight);
         this.spike_threshold = parseFloat(spike_threshold);
-        this.timestep = 0.01;
+        this.timestep = 0.1;
         this.circle = document.createElementNS(svgns, "circle");
         this.circle.classList.add("neuron");
         this.circle.classList.add("svg_element");
@@ -46,6 +46,7 @@ class Neuron {
             type: 'scatter',
         }
         this.plotActive = false;
+        this.alpha = Math.exp(this.timestep*-1/this.leakage);
     }
 
     spike(){
@@ -85,8 +86,7 @@ class Neuron {
     update(dt){
         // calculate new potential
         this.dt.push(dt);
-        let alpha = Math.exp(this.timestep*-1/this.tau);
-        this.potential = this.potential * alpha;
+        this.potential = this.potential * this.alpha;
         if (this.potential >= this.spike_threshold) {
             this.spike();
             this.vs.push(this.potential);
