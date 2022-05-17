@@ -98,17 +98,22 @@
 
   **Experimente mit unterschiedlich dichter und starker (Synapsen) Vernetzung**
 
-  - **Vernetzungswahrscheinlichkeit 30%, Synaptic Weight 0.5**
+  - **Anzahl 10, Vernetzungswahrscheinlichkeit 30%, Synaptic Weight 0.5**
       * Um eine Anregung der Neuronen zu starten sind mehrere Spikes in kurzen Zeitabständen zueinander nötig. Nach einer kurzen Phase in der sich die Neuronen gegenseitig aktivieren, versiegt das Potential wieder schnell. 
+      * Erhöht man die Anzahl der Neuronen auf 60, erreicht man nach 3 initialen Spikes ein konstant hohes Potential bei allen Neuronen.
+      ![](3spikes.png)
 
-
-
+  - **Anzahl 10, Vernetzungswahrscheinlichkeit 60%, Synaptic Weight 0.9**
+      * Die Anregung der Neuronen erfolgt bereits nach zwei initialen Spikes. Danach bleiben die Neuronen konstant auf einem hohen Level.
+      ![](all_spiked.png)
 
   **Welchen Einfluss hat die initiale Anregung des Netzes auf den Endzustand.**
 
   **Welche anderen Dynamiken außer der Sättigung und dem Versiegen von Aktivität ist prinzipiell möglich? Gelingt es Ihnen Eine solche Dynamik zu erzeugen?**
 
-
+  - **Anzahl 121, Vernetzungswahrscheinlichkeit 3.8%, Synaptic Weight 0.8**
+      * nachdem initial 6 Spikes ausgelöst wurden ergibt sich ein flmmer Zustand. Einige Neuronen 
+      ![](flimmern.png)
 
   {% endmarkdown %}
 </section>
