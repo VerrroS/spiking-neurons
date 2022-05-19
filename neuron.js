@@ -29,7 +29,7 @@ class Neuron {
         this.leakage = parseFloat(leakage);
         this.synaptic_weight = parseFloat(synaptic_weight);
         this.spike_threshold = parseFloat(spike_threshold);
-        this.timestep = 0.1;
+        this.timestep = 1;
         this.circle = document.createElementNS(svgns, "circle");
         this.circle.classList.add("neuron");
         this.circle.classList.add("svg_element");

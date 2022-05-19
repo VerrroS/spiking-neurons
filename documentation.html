@@ -15,12 +15,15 @@
 <body class="container mt-2 mb-2">
     
 
+<div id="documentation">
+
 <h1>Dokumentation   <a href="./">Zur&uuml;ck zur Neuronen Simulation</a>  <a href="https://github.com/VerrroS/spiking-neurons" id="github" target="_blank"><span class="iconify" data-icon="akar-icons:github-fill"></span></a></h1>
 <h2>Technische Dokumentation</h2>
 <p>Ich habe mich gegen ein Framework wie Tensorflow entschieden. Die Lösung ist nur in JavaScript, Html und Css implementiert. Zusätzlich habe ich <a href="https://plotly.com/javascript/">Plotly.js</a> verwendet um die Signale der einzelnen Neuronen grafisch anzuzeigen.
 Um das Layout zu gestalten habe ich <a href="https://getbootstrap.com/">Bootstrap</a> und <a href="https://iconify.design/">Iconify</a> verwendet.</p>
 <h2>Fachliche Dokumentation</h2>
-<p>Die Klasse <strong>Neuron</strong> beinhaltet die wichtigste Logik der Simulation. Ein Neuron wird initalisiert mit einem Rest Potential, einer Spike Threshold, einem leakage Wert und einer Synaptic weight. Diese Werte können vom Benutzer eingestellt werden.</p>
+<p>Die Klasse <strong>Neuron</strong> beinhaltet die wichtigste Logik der Simulation. Ein Neuron wird initalisiert mit einem Rest Potential, einer Spike Threshold, einem leakage Wert und einer Synaptic weight. Diese Werte können vom Benutzer eingestellt werden.
+Jedes Neuron hat eine Liste von anderen Neuronen, die mit diesem verbunden sind.</p>
 <div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="n">Neuron</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="n">constructor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">neuron_id</span><span class="p">,</span><span class="w"> </span><span class="n">leakage</span><span class="p">,</span><span class="w"> </span><span class="n">synaptic_weight</span><span class="p">,</span><span class="w"> </span><span class="n">spike_threshold</span><span class="p">){</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
@@ -32,7 +35,7 @@ Um das Layout zu gestalten habe ich <a href="https://getbootstrap.com/">Bootstra
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">leakage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parseFloat</span><span class="p">(</span><span class="n">leakage</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">synaptic_weight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parseFloat</span><span class="p">(</span><span class="n">synaptic_weight</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">spike_threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parseFloat</span><span class="p">(</span><span class="n">spike_threshold</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">timestep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.01</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">timestep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">circle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">document</span><span class="o">.</span><span class="n">createElementNS</span><span class="p">(</span><span class="n">svgns</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;circle&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">circle</span><span class="o">.</span><span class="n">classList</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;neuron&quot;</span><span class="p">);</span><span class="w"></span>
 <span class="w">        </span><span class="n">this</span><span class="o">.</span><span class="n">circle</span><span class="o">.</span><span class="n">classList</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svg_element&quot;</span><span class="p">);</span><span class="w"></span>
@@ -87,7 +90,7 @@ Um das Layout zu gestalten habe ich <a href="https://getbootstrap.com/">Bootstra
 }<span class="c1">;</span>
 </code></pre></div>
 
-<p>Die Methode <strong>update()</strong>, aus der Klasse Neuron, wird in jedem Frame aufgerufen. Sie berechnet die Neuronen Potentiale und setzt die Neuronen auf den neuen Werten.
+<p>Die Methode <strong>update()</strong>, aus der Klasse Neuron, wird jede Sekunde aufgerufen. Sie berechnet die Neuronen Potentiale und setzt die Neuronen auf den neuen Werten.
 Liegt das Potentioal über dem Spike Threshold wird ein Spike ausgelöst. Dieser wird dann in die <strong>spike()</strong> Funktion übergeben. Die verlinkten Neuronen 
 werden je nach Synaptischem Gewicht auch aktualisiert. Um das Potential über die Zeit anzeigen zu können wird ein Array mit den Potentialen und ein Array mit den Zeiten gespeichert.
 Sobald das Neuron angeklickt wird werden diese Werte in einem Plot angezeigt.</p>
@@ -109,7 +112,7 @@ Sobald das Neuron angeklickt wird werden diese Werte in einem Plot angezeigt.</p
 </code></pre></div>
 
 <p>In der <strong>spike()</strong> Methode bekommt das Neuron die Klasse spike und wird dementsprechend in einer anderen Farbe dargestellt. Ist der Sound aktiviert, wird ein Ton abgespielt.
-Das synaptische Gewicht wird an die verlinkten Neuronen übergeben.</p>
+Das synaptische Gewicht wird an die verlinkten Neuronen übergeben. Ein Spike wird entweder durch die upadte Methode oder durch einen Klick auf das Neuron ausgelöst.</p>
 <div class="codehilite"><pre><span></span><code><span class="nv">spike</span><span class="ss">()</span>{
     <span class="nv">this</span>.<span class="nv">potential</span> <span class="o">=</span> <span class="mi">4</span>.<span class="mi">0</span><span class="c1">;</span>
     <span class="nv">neurons_nodes</span>[<span class="nv">this</span>.<span class="nv">id</span>].<span class="nv">classList</span>.<span class="nv">add</span><span class="ss">(</span><span class="s2">&quot;</span><span class="s">spiked</span><span class="s2">&quot;</span><span class="ss">)</span><span class="c1">;</span>
@@ -123,13 +126,13 @@ Das synaptische Gewicht wird an die verlinkten Neuronen übergeben.</p>
 </code></pre></div>
 
 <h3 id="leakage">
-Leaky Integrate-and-Fire
+Leaky Integrate-and-Fire Modell
 </h3>
 
 <p>Wenn das Neuron keinen Input bekommt nimmt das Potential (V) des Neurons über die Zeit(t) exponentiell ab und nähert sich dem Wert 0. Wie schnell dieses Potential sinkt wird durch den Leakage Wert(tau)
 eingestellt. Dieser Abfall wird durch folgende Funktion beschrieben.</p>
 <p><img alt="equasion" src="tau.svg" /></p>
-<p>Je größer der Leakage Wer ist desto schneller sinkt das Potential. In der Methode <strong>update()</strong> wird der Abfall des Potentials mit der Konstanten alpha berechnet.
+<p>Je größer der Leakage Wer ist desto langsamer sinkt das Potential. Der Wert gibt an nach Welcher Zeit sich das Potential um den Faktor 1/e reduziert. In der Methode <strong>update()</strong> wird der Abfall des Potentials mit der Konstanten alpha berechnet.
 Die Herleitung dieser Berechnung ist in der stammt aus folgendem <a href="https://colab.research.google.com/github/neural-reckoning/cosyne-tutorial-2022/blob/main/1-lif.ipynb#scrollTo=febd51da">Dokument</a>.</p>
 <h2>Quellen</h2>
 <ul>
@@ -138,6 +141,8 @@ Die Herleitung dieser Berechnung ist in der stammt aus folgendem <a href="https:
 <li><a href="https://neural-reckoning.github.io/cosyne-tutorial-2022/" target="_blank">Cosyne Tutorial 2022 - Spiking Neural Networks</a></li>
 <li><a href="https://colab.research.google.com/github/neural-reckoning/cosyne-tutorial-2022/blob/main/1-lif.ipynb" target="_blank">The Leaky Integrate-and-Fire (LIF) neuron</a></li>
 </ul>
+
+</div>
 
 
 </body>

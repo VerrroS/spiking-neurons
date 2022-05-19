@@ -46,7 +46,7 @@
         <div id="settings-helper">
           <p><strong>Anzahl der Neuronen</strong> gibt an wie viele Neuronen in der Simulation enthalten sind.</p>
 <p><strong>Vernetzungswahrscheinlichkeit</strong> gibt mit welcher Wahrscheinlichkeit ein Neuron mit einem anderen verbunden ist.</p>
-<p><strong>Leakage</strong> gibt schnell das Potential über die Zeit abnimmt <a href="/documentation.html#leakage">weitere Informationen</a>.</p>
+<p><strong>Leakage</strong> gibt die Zeit nach der sich das Potential um den Faktor 1/e reduziert. Je höher der Wert desto langsamer nimmt das Potential ab. <a href="/documentation.html#leakage">weitere Informationen</a>.</p>
 <p><strong>Spike Threshold</strong> gibt an wie hoch das Potential eins Neurons sein muss, um einen Spike zu erzeugen.</p>
 <p><strong>Synaptic weight</strong> gibt an wie stark ein Neuron mit einem anderen verbunden ist.</p>
         </div>
@@ -84,7 +84,7 @@
 </div>
   <div class="col-lg-6">
     <div id="plot-container">
-      <h4 id="plot-nonactive" class="active">Klicken sie auf eines der Neuronen um dessen Potential zu sehen</h4>
+      <h4 id="plot-nonactive" class="active">Klicken Sie auf eines der Neuronen um dessen Potential zu sehen</h4>
       <h4 id="plot-active">Potential des ausgewählten Neuron 
         <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="orange" stroke-width="4"/></svg>
         <div class="help-icon" data-key="diagramm-helper">
@@ -99,31 +99,40 @@
   </div>
 </div>
 
-<section class="mt-4">
+<section class="mt-4" id="experimente">
   <h2>Experimente und Fragestellungen</h2>
-<p><strong>Experimente mit unterschiedlich dichter und starker (Synapsen) Vernetzung</strong></p>
+<p>Experimente mit unterschiedlich dichter und starker (Synapsen) Vernetzung.
+Welchen Einfluss hat die initiale Anregung des Netzes auf den Endzustand?
+Welche anderen Dynamiken außer der Sättigung und dem Versiegen von Aktivität ist prinzipiell möglich? Gelingt es eine solche Dynamik zu erzeugen?</p>
 <ul>
 <li>
-<p><strong>Anzahl 10, Vernetzungswahrscheinlichkeit 30%, Synaptic Weight 0.5</strong></p>
+<p>Vernetzungswahrscheinlichkeit 30%, Synaptic Weight 0,9, Leakage 10,0, Spike Threshold 2,0</p>
 <ul>
-<li>Um eine Anregung der Neuronen zu starten sind mehrere Spikes in kurzen Zeitabständen zueinander nötig. Nach einer kurzen Phase in der sich die Neuronen gegenseitig aktivieren, versiegt das Potential wieder schnell. </li>
-<li>Erhöht man die Anzahl der Neuronen auf 60, erreicht man nach 3 initialen Spikes ein konstant hohes Potential bei allen Neuronen.
-<img alt="" src="3spikes.png" /></li>
-</ul>
-</li>
-<li>
-<p><strong>Anzahl 10, Vernetzungswahrscheinlichkeit 60%, Synaptic Weight 0.9</strong></p>
-<ul>
-<li>Die Anregung der Neuronen erfolgt bereits nach zwei initialen Spikes. Danach bleiben die Neuronen konstant auf einem hohen Level.
+<li>Bei der Anzahl von <strong>10 Neuronen</strong> ist keine Anregung des Netzes möglich. Auch bei wiederholter initialer Anregung erreichen die verknüpften Neuronen kein Spike.
+<img alt="" src="no_spikes.png" /></li>
+<li>Erhöht man die <strong>Anzahl der Neuronen</strong> auf <strong>100</strong>, erreicht man mit nur zwei initialen Spikes einen Zusatnd in dem das Potetial der Neuronen nicht mehr abfällt.
 <img alt="" src="all_spiked.png" /></li>
 </ul>
 </li>
-</ul>
-<p><strong>Welchen Einfluss hat die initiale Anregung des Netzes auf den Endzustand.</strong></p>
-<p><strong>Welche anderen Dynamiken außer der Sättigung und dem Versiegen von Aktivität ist prinzipiell möglich? Gelingt es Ihnen Eine solche Dynamik zu erzeugen?</strong></p>
+<li>
+<p><strong>Vernetzungswahrscheinlichkeit 60%</strong>, <strong>Synaptic Weight 1,2</strong>, Leakage 10,0, Spike Threshold 2,0</p>
 <ul>
-<li><strong>Anzahl 121, Vernetzungswahrscheinlichkeit 3.8%, Synaptic Weight 0.8</strong><ul>
-<li>nachdem initial 6 Spikes ausgelöst wurden ergibt sich ein flmmer Zustand. Einige Neuronen 
+<li>Bei einer <strong>Anzahl von 10</strong> Neuronen erfolgt die Anregung bereits nach einem initialen Spike. Danach bleiben die Neuronen konstant auf einem hohen Level.</li>
+<li>Den gleichen Effekt erziehlt man mit <strong>100 Neuronen</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>Vernetzungswahrscheinlichkeit 3,9%</strong>, Synaptic Weight 0,9, <strong>Leakage 50,0</strong>, Spike Threshold 2,0</p>
+<ul>
+<li>Bei einer <strong>Anzahl von 60</strong> Neuronen erreicht man mit regelmäßiger Anregung in kurzen Abständen eines Neurons immer wieder kurze Aktivitäten im Netz.
+<img alt="" src="aktiv.png" /></li>
+<li>Erhöht man die zeitlichen Abstände der Anregung werden die Aktivitätsphasen kürzer.</li>
+</ul>
+</li>
+<li>
+<p><strong>Anzahl 98</strong>, <strong>Vernetzungswahrscheinlichkeit 3,9%</strong>, Synaptic Weight 0,9, <strong>Leakage 50,0</strong>, Spike Threshold 2,0</p>
+<ul>
+<li>nachdem initial 6 Spikes ausgelöst wurden ergibt sich ein flimmer Zustand ohne, dass weitere Spikes manuell hinzugefügt werden müssen. Einige Neuronen Spiken immer wieder und fallen anschließend nicht mehr auf ihr Restpotential (0) zurück.
 <img alt="" src="flimmern.png" /></li>
 </ul>
 </li>

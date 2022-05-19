@@ -21,6 +21,10 @@
     margin-left: auto;
   }
 
+  #documentation h3, #documentation h4, #documentation p, #documentation li, #documentation pre {
+    margin-left: 3rem;
+  }
+
   #svg_canvas {
     width: 100%;
     height: 600px;
@@ -169,6 +173,12 @@ h1 a{
   color: darkslategray;
 }
 
+#experimente img{
+  max-width: 600px;
+  display: block;
+  width: 100%;
+}
+
 pre {
   background-color: darkslategrey;
   color: white;
@@ -195,3 +205,21 @@ pre {
       font-size: 1.5rem!important;
   }
 }
+
+@media  screen and (max-width: 992px) {
+ #plot-container {
+    position: relative;
+
+  }
+  #plot{
+    overflow: scroll;
+  }
+  .plotly{
+    height: 500px;
+    min-width: 600px;
+  }
+  #documentation h3, #documentation h4, #documentation p, #documentation li, #documentation pre {
+    margin-left: 0;
+  }
+}
+  

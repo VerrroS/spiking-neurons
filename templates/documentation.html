@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 {% block main %}
 
+<div id="documentation">
+
 {% markdown %}
 
 # Dokumentation   <a href="./">Zur&uuml;ck zur Neuronen Simulation</a>  <a href="https://github.com/VerrroS/spiking-neurons" id="github" target="_blank"><span class="iconify" data-icon="akar-icons:github-fill"></span></a>
@@ -14,6 +16,7 @@ Um das Layout zu gestalten habe ich [Bootstrap](https://getbootstrap.com/) und [
 ## Fachliche Dokumentation
 
 Die Klasse **Neuron** beinhaltet die wichtigste Logik der Simulation. Ein Neuron wird initalisiert mit einem Rest Potential, einer Spike Threshold, einem leakage Wert und einer Synaptic weight. Diese Werte können vom Benutzer eingestellt werden.
+Jedes Neuron hat eine Liste von anderen Neuronen, die mit diesem verbunden sind.
 
 
     class Neuron {
@@ -27,7 +30,7 @@ Die Klasse **Neuron** beinhaltet die wichtigste Logik der Simulation. Ein Neuron
             this.leakage = parseFloat(leakage);
             this.synaptic_weight = parseFloat(synaptic_weight);
             this.spike_threshold = parseFloat(spike_threshold);
-            this.timestep = 0.01;
+            this.timestep = 1;
             this.circle = document.createElementNS(svgns, "circle");
             this.circle.classList.add("neuron");
             this.circle.classList.add("svg_element");
@@ -82,7 +85,7 @@ Mit der Funktion **resetNeurons()** werden die Neuronen initialisiert und je nac
     };
 
 
-Die Methode **update()**, aus der Klasse Neuron, wird in jedem Frame aufgerufen. Sie berechnet die Neuronen Potentiale und setzt die Neuronen auf den neuen Werten.
+Die Methode **update()**, aus der Klasse Neuron, wird jede Sekunde aufgerufen. Sie berechnet die Neuronen Potentiale und setzt die Neuronen auf den neuen Werten.
 Liegt das Potentioal über dem Spike Threshold wird ein Spike ausgelöst. Dieser wird dann in die **spike()** Funktion übergeben. Die verlinkten Neuronen 
 werden je nach Synaptischem Gewicht auch aktualisiert. Um das Potential über die Zeit anzeigen zu können wird ein Array mit den Potentialen und ein Array mit den Zeiten gespeichert.
 Sobald das Neuron angeklickt wird werden diese Werte in einem Plot angezeigt.
@@ -104,7 +107,7 @@ Sobald das Neuron angeklickt wird werden diese Werte in einem Plot angezeigt.
     }
 
 In der **spike()** Methode bekommt das Neuron die Klasse spike und wird dementsprechend in einer anderen Farbe dargestellt. Ist der Sound aktiviert, wird ein Ton abgespielt.
-Das synaptische Gewicht wird an die verlinkten Neuronen übergeben.
+Das synaptische Gewicht wird an die verlinkten Neuronen übergeben. Ein Spike wird entweder durch die upadte Methode oder durch einen Klick auf das Neuron ausgelöst.
 
     spike(){
         this.potential = 4.0;
@@ -119,7 +122,7 @@ Das synaptische Gewicht wird an die verlinkten Neuronen übergeben.
 
 
 <h3 id="leakage">
-Leaky Integrate-and-Fire
+Leaky Integrate-and-Fire Modell
 </h3>
 
 Wenn das Neuron keinen Input bekommt nimmt das Potential (V) des Neurons über die Zeit(t) exponentiell ab und nähert sich dem Wert 0. Wie schnell dieses Potential sinkt wird durch den Leakage Wert(tau)
@@ -127,7 +130,7 @@ eingestellt. Dieser Abfall wird durch folgende Funktion beschrieben.
 
 ![equasion](tau.svg)
 
-Je größer der Leakage Wer ist desto schneller sinkt das Potential. In der Methode **update()** wird der Abfall des Potentials mit der Konstanten alpha berechnet.
+Je größer der Leakage Wer ist desto langsamer sinkt das Potential. Der Wert gibt an nach Welcher Zeit sich das Potential um den Faktor 1/e reduziert. In der Methode **update()** wird der Abfall des Potentials mit der Konstanten alpha berechnet.
 Die Herleitung dieser Berechnung ist in der stammt aus folgendem [Dokument](https://colab.research.google.com/github/neural-reckoning/cosyne-tutorial-2022/blob/main/1-lif.ipynb#scrollTo=febd51da).
 
 
@@ -139,5 +142,7 @@ Die Herleitung dieser Berechnung ist in der stammt aus folgendem [Dokument](http
 - [The Leaky Integrate-and-Fire (LIF) neuron](https://colab.research.google.com/github/neural-reckoning/cosyne-tutorial-2022/blob/main/1-lif.ipynb){:target="_blank"}
 
 {% endmarkdown %}
+
+</div>
 
 {% endblock %}
